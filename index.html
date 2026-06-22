@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Teste Vocacional – Universidade Sem Mistérios</title>
+
+<style>
+body {
+  font-family: Arial;
+  background: linear-gradient(135deg,#667eea,#764ba2);
+  margin: 0;
+}
+
+.container {
+  background: white;
+  max-width: 650px;
+  margin: 40px auto;
+  padding: 25px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.opcao {
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.opcao:hover {
+  background: #eee;
+}
+
+button {
+  margin-top:20px;
+  padding:10px;
+  background:#764ba2;
+  color:white;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h1>🎓 Teste Vocacional – Universidade Sem Mistérios</h1>
+
+<h2 id="pergunta"></h2>
+<div id="opcoes"></div>
+
+</div>
+
+<script>
+
+// PERGUNTAS (subjetivas)
+let perguntas = [
+"Em um projeto em grupo, qual função você assume naturalmente?",
+"Diante de um problema inesperado, o que você faz primeiro?",
+"Para tomar decisões importantes você:",
+"O que mais te incomoda em um grupo?",
+"Qual situação te dá mais satisfação?",
+"Como você aprende melhor?",
+"Qual dessas atividades parece mais interessante?",
+"Se pudesse escolher um desafio:",
+"Qual profissão mais te chama atenção?",
+"Você quer no futuro:",
+"Sua maior habilidade é:",
+"Qual projeto faria com mais interesse?",
+"Qual assunto mais te atrai?",
+"Qual trabalho você prefere?",
+"Como você resolve problemas?"
+];
+
+let alternativas = [
+["Resolver parte técnica","Organizar ideias","Cuidar das pessoas","Criar tecnologia","Ensinar"],
+["Analisar dados","Conversar","Observar","Testar","Pesquisar"],
+["Usar lógica","Ouvir pessoas","Pensar nos outros","Criar algo novo","Equilibrar tudo"],
+["Falta de lógica","Falta de diálogo","Falta de empatia","Falta de inovação","Desorganização"],
+["Resolver desafios","Debater ideias","Ajudar alguém","Criar algo novo","Ensinar"],
+["Praticando","Lendo e discutindo","Observando","Testando","Conversando"],
+["Resolver problema","Debate social","Ajudar alguém","Criar aplicativo","Ensinar"],
+["Matemático","Social","Científico","Tecnológico","Educacional"],
+["Engenharia","Direito","Medicina","Programação","Professor"],
+["Criar soluções","Influenciar","Salvar vidas","Inovar","Educar"],
+["Raciocínio lógico","Comunicação","Empatia","Criatividade","Explicar"],
+["Sistema","Debate","Experimento","Tecnologia","Social"],
+["Tecnologia","Sociedade","Saúde","Inovação","Educação"],
+["Técnico","Social","Saúde","Tecnologia","Educação"],
+["Analisa","Conversa","Investiga","Cria","Ajuda"]
+];
+
+let areas = ["exatas","humanas","biologicas","tecnologia","educacao"];
+
+let pontos = {
+  exatas:0,
+  humanas:0,
+  biologicas:0,
+  tecnologia:0,
+  educacao:0
+};
+
+let atual = 0;
+
+// MOSTRAR PERGUNTA
+function mostrar(){
+  document.getElementById("pergunta").innerText =
+    (atual+1) + "/15 - " + perguntas[atual];
+
+  let html = "";
+
+  for(let i=0;i<5;i++){
+    html += `<div class="opcao" onclick="responder(${i})">
+             ${alternativas[atual][i]}</div>`;
+  }
+
+  document.getElementById("opcoes").innerHTML = html;
+}
+
+// RESPONDER
+function responder(i){
+  pontos[areas[i]]++;
+  atual++;
+
+  if(atual < 15){
+    mostrar();
+  } else {
+    mostrarResultado();
+  }
+}
+
+// RESULTADO FINAL
+function mostrarResultado(){
+
+  let ranking = Object.entries(pontos)
+      .sort((a,b)=>b[1]-a[1]);
+
+  let top = ranking[0][0];
+
+  let html = "<h2>📊 Resultado Final</h2>";
+  html += "<h3>Perfil: " + top.toUpperCase() + "</h3>";
+
+  // BIOLOGICAS
+  if(top==="biologicas"){
+    html+=`
+    <h3>💡 Cursos:</h3>
+    Medicina – USP (~96/vaga)<br>
+    Medicina – UNESP (~261/vaga)<br>
+    Medicina – UNICAMP (~266/vaga)<br>
+    Psicologia – USP (~55/vaga)<br>
+
+    <h3>📊 Concorrência 2025</h3>
+    Mais concorrido: Medicina UNICAMP (~266)<br>
+    Menos concorrido: Enfermagem USP (~6)
+    `;
+  }
+
+  // HUMANAS
+  if(top==="humanas"){
+    html+=`
+    <h3>💡 Cursos:</h3>
+    Direito – USP (~24/vaga)<br>
+    Relações Internacionais (~42/vaga)<br>
+    Jornalismo (~26/vaga)<br>
+    Direito – UNESP (~41/vaga)<br>
+
+    <h3>📊 Concorrência 2025</h3>
+    Mais concorrido: RI (~42)<br>
+    Menos concorrido: Filosofia (~4)
+    `;
+  }
+
+  // EXATAS / TECNOLOGIA
+  if(top==="exatas" || top==="tecnologia"){
+    html+=`
+    <h3>💡 Cursos:</h3>
+    Computação – UNICAMP (~73/vaga)<br>
+    Engenharia – USP (~22/vaga)<br>
+    Sistemas – UNESP (~13/vaga)<br>
+
+    <h3>📊 Concorrência 2025</h3>
+    Mais concorrido: Computação (~73)<br>
+    Menos concorrido: Eng. Ambiental (~3)
+    `;
+  }
+
+  // EDUCAÇÃO
+  if(top==="educacao"){
+    html+=`
+    <h3>💡 Cursos:</h3>
+    Pedagogia (~6/vaga)<br>
+    Licenciaturas – UNESP / UNICAMP<br>
+
+    <h3>📊 Concorrência 2025</h3>
+    Mais concorrido: Psicologia (~55)<br>
+    Menos concorrido: Licenciaturas (~3)
+    `;
+  }
+
+  html += `<button onclick="location.reload()">🔄 Refazer teste</button>`;
+
+  document.getElementById("pergunta").innerHTML = html;
+  document.getElementById("opcoes").innerHTML = "";
+}
+
+// INICIAR
+mostrar();
+
+</script>
+
+</body>
+</html>
